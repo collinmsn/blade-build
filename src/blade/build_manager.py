@@ -229,7 +229,7 @@ class Blade(object):
                 print('//%s:%s depends on the following targets:' % (key[0], key[1]),
                       file=output_file)
                 for d in deps:
-                    print('%s:%s' % (d[0], d[1]), file=output_file)
+                    print('//%s:%s' % (d[0], d[1]), file=output_file)
         if self.__options.dependents:
             for key in result_map:
                 print(file=output_file)
@@ -237,7 +237,7 @@ class Blade(object):
                 print('//%s:%s is depended by the following targets:' % (key[0], key[1]),
                       file=output_file)
                 for d in depended_by:
-                    print('%s:%s' % (d[0], d[1]), file=output_file)
+                    print('//%s:%s' % (d[0], d[1]), file=output_file)
 
     def print_dot_node(self, output_file, node):
         print('"%s:%s" [label = "%s:%s"]' % (node[0], node[1], node[0], node[1]), file=output_file)
@@ -278,7 +278,7 @@ class Blade(object):
 
         result_map = {}
         for key in query_list:
-            deps = all_targets[key].expanded_deps
+            deps = all_targets[key].deps if self.__options.query_direct else all_targets[key].expanded_deps
             # depended_by = [k for k in all_targets if key in all_targets[k].expanded_deps]
             depended_by = self.__depended_targets[key]
             result_map[key] = (sorted(deps), sorted(depended_by))
@@ -303,6 +303,8 @@ class Blade(object):
         else:
             output = '%s%s %s:%s' % ('|  ' * (level - 1), '+-', path, name)
         print(output, file=output_file)
+        if self.__options.query_direct and level > 0:
+            return
         for dkey in build_targets[key].deps:
             self._query_dependency_tree(dkey, level + 1, build_targets, output_file)
 

@@ -84,16 +84,6 @@ class BuildEnvironment(object):
                 console.debug('distcc found')
                 return True
 
-    def setup_build_cache(self, options):
-        if self.ccache_installed:
-            self._add_rule('top_env.Append(CCACHE_BASEDIR="%s")' % self.blade_root_dir)
-            self._add_rule('top_env.Append(CCACHE_NOHASHDIR="true")')
-
-    def setup_distcc_env(self):
-        """Generates distcc rules. """
-        if self.distcc_installed:
-            self._add_rule('top_env.Append(DISTCC_HOSTS="%s")' % self.distcc_host_list)
-
     def get_distcc_hosts_list(self):
         """Returns the hosts list. """
         return [x for x in self.distcc_host_list.split(' ') if x]

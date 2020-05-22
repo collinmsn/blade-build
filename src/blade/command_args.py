@@ -272,8 +272,9 @@ class CmdArguments(object):
             choices=('plain', 'tree', 'dot'), default='plain',
             help='Specify the format of query results')
         parser.add_argument(
-            '--depended', dest='dependents', action='store_true',
-            help='DEPRECATED, please use --dependents')
+            '--direct', dest='query_direct',
+            action='store_true', default=False,
+            help='Only query direct dependencies')
 
     def _add_clean_arguments(self, parser):
         """Add clean arguments for parser. """
