@@ -184,7 +184,7 @@ class Blade(object):
         error = 0
         for k in self.__sorted_targets_keys:
             target = self.__build_targets[k]
-            if target.type.startswith('cc_') and target.srcs:
+            if target.type == 'cc_library' and target.srcs:
                 if not target.verify_header_inclusion_dependencies(header_inclusion_history):
                     error += 1
         self._dump_verify_history()
